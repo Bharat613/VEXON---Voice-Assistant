@@ -71,6 +71,44 @@ function takeCommand(message) {
         window.open("https://facebook.com", "_blank");
         speak("Opening Facebook...");
     } 
+    else if (message.includes('my age')) {
+        console.log("Function triggered with message:", message);
+    
+        const dobMatch = message.match(/(\d{1,2})\s*(\w+)\s*(\d{4})/); 
+        
+        if (dobMatch) {
+            console.log("Date extracted:", dobMatch);
+    
+            const day = parseInt(dobMatch[1], 10);
+            const month = dobMatch[2].toLowerCase();
+            const year = parseInt(dobMatch[3], 10);
+    
+            const months = {
+                january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
+                july: 6, august: 7, september: 8, october: 9, november: 10, december: 11
+            };
+    
+            if (months[month] !== undefined) {
+                const dob = new Date(year, months[month], day); 
+                const today = new Date();
+                let age = today.getFullYear() - dob.getFullYear(); 
+    
+                if (today.getMonth() < dob.getMonth() || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
+                    age--;
+                }
+    
+                console.log(`Calculated age: ${age}`);
+                speak(`Your age is ${age} years.`);
+            } else {
+                console.log("Month not recognized:", month);
+                speak("I couldn't understand your date of birth.");
+            }
+        } else {
+            console.log("No date found in message.");
+            speak("I couldn't understand your date of birth.");
+        }
+    }
+  
 else if(message.includes('your name')){
     speak('My name is VEXON. I am your virtual assistant, here to help you with anything you need!');
 }
@@ -193,44 +231,7 @@ else if (message.includes('weight')) {
             });
     }
     
-    else if (message.includes('what is my age') || message.includes('born') || message.includes('his age')) {
-        console.log("Function triggered with message:", message);
-    
-        const dobMatch = message.match(/(\d{1,2})\s*(\w+)\s*(\d{4})/); 
-        
-        if (dobMatch) {
-            console.log("Date extracted:", dobMatch);
-    
-            const day = parseInt(dobMatch[1], 10);
-            const month = dobMatch[2].toLowerCase();
-            const year = parseInt(dobMatch[3], 10);
-    
-            const months = {
-                january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
-                july: 6, august: 7, september: 8, october: 9, november: 10, december: 11
-            };
-    
-            if (months[month] !== undefined) {
-                const dob = new Date(year, months[month], day); 
-                const today = new Date();
-                let age = today.getFullYear() - dob.getFullYear(); 
-    
-                if (today.getMonth() < dob.getMonth() || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
-                    age--;
-                }
-    
-                console.log(`Calculated age: ${age}`);
-                speak(`Your age is ${age} years.`);
-            } else {
-                console.log("Month not recognized:", month);
-                speak("I couldn't understand your date of birth.");
-            }
-        } else {
-            console.log("No date found in message.");
-            speak("I couldn't understand your date of birth.");
-        }
-    }
-  
+   
 
     else if (message.includes('what is') || message.includes('who is') || message.includes('what are')) {
         window.open(`https://www.google.com/search?q=${message.replace(" ", "+")}`, "_blank");

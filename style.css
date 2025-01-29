@@ -126,7 +126,7 @@
 /* Default styles for larger screens (already in your CSS) */
 
 /* Media query for smartphones */
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width:768px) {
     .main {
         text-align: center;
         padding: 20px;
@@ -145,7 +145,7 @@
     }
 
     h1 {
-        font-size: 24px;
+        font-size: 27px;
     }
 
     p {
@@ -154,7 +154,7 @@
 
     .input {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
     }
 
@@ -164,9 +164,10 @@
         font-size: 20px;
     }
 
-    .content {
-        font-size: 14px;
-        margin-top: 10px;
+    .input .content {
+        font-size: 12px !important;
+        
+        
     }
 
     #text-display {
@@ -175,7 +176,8 @@
         padding: 10px;
         word-wrap: break-word;
         text-align: center;
-        
+         /* Enables vertical scrolling */
+    
     }
 
     footer {

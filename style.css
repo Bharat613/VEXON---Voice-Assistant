@@ -1,0 +1,187 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;200;300;400;500;600;700&display=swap");
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Roboto Mono", monospace;
+}
+.main {
+    min-height: 100vh;
+    position: relative;
+    width: 100%;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.main .image-container {
+    padding: 10px;
+}
+
+.main .image-container .image {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main .image-container .image img {
+    width: 350px;
+    align-items: center;
+}
+
+.main .image-container h1 {
+    color: #00bcd4;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 40px;
+    
+}
+
+.main .image-container p {
+    color: #678b91;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.main .image-container .image {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main .image-container .image img {
+    width: 300px;
+    align-items: center;
+}
+
+.main .image-container h1 {
+    /* color: #00bcd4; */
+    color : rgb(98, 122, 166);
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 40px;
+}
+
+.main .image-container p {
+    color: #7ee7c6;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.input{
+    cursor : pointer;
+}
+.main .input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40vw;
+    height: 50px;
+    border-radius: 20px;
+    /* background: rgb(202 253 255 / 50%); */
+    background : rgb(90, 155, 245);
+}
+
+.main .input .talk{
+    background: transparent;
+    outline: none;
+    border: none;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.main .input .talk i {
+    font-size: 20px;
+    color: #9df3f3;
+}
+
+.main .input .content {
+    color: #5cf2f2;
+    font-size: 15px;
+    margin-right: 20px;
+}
+#text-display {
+    border: 2px solid rgb(31, 28, 28);
+    width: 600px;
+    height: 100px;
+    margin-top: 30px;
+    border-radius: 10px;
+    display: flex;              
+    justify-content: center;     
+    align-items: center;         
+    text-align: center;  
+    color : white;   
+    overflow: hidden;  
+    font-size : 11px;    
+}
+
+/* Default styles for larger screens (already in your CSS) */
+
+/* Media query for smartphones */
+@media only screen and (max-width: 500px) {
+    .main {
+        text-align: center;
+        padding: 20px;
+        
+    }
+
+    .image-container {
+        width: 100%;
+        margin-bottom: 10px;
+        
+    }
+
+    .image img {
+        width: 80%; /* Adjust image size */
+        max-width: 200px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    .input {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .talk {
+        width: 60px;
+        height: 60px;
+        font-size: 20px;
+    }
+
+    .content {
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+    #text-display {
+        width: 90%;
+        font-size: 14px;
+        padding: 10px;
+        word-wrap: break-word;
+        text-align: center;
+        overflow-x: scroll; /* Enables horizontal scrolling */
+    overflow-y: scroll; /* Enables vertical scrolling */
+    white-space: nowrap;
+    }
+
+    footer {
+        font-size: 10px;
+        padding: 5px;
+    }
+}

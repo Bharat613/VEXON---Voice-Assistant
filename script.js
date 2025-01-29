@@ -71,6 +71,9 @@ function takeCommand(message) {
         window.open("https://facebook.com", "_blank");
         speak("Opening Facebook...");
     } 
+        else if(message.includes('who is your boss') || message.includes('who created you') || message.includes('who developed you')){
+        speak('SHIVA...');
+    }
          else if (message.includes('internet speed')) {
         if (navigator.connection) {
             const speed = navigator.connection.downlink;

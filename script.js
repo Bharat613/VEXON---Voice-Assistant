@@ -71,6 +71,15 @@ function takeCommand(message) {
         window.open("https://facebook.com", "_blank");
         speak("Opening Facebook...");
     } 
+         else if (message.includes('internet speed')) {
+        if (navigator.connection) {
+            const speed = navigator.connection.downlink;
+            const speedMessage = `Your current internet speed is approximately ${speed} Mbps.`;
+            speak(speedMessage);
+        } else {
+            speak("Sorry, I can't determine the internet speed on this device.");
+        }
+    }
     else if (message.includes('my age')) {
         console.log("Function triggered with message:", message);
     

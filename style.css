@@ -175,9 +175,7 @@
         padding: 10px;
         word-wrap: break-word;
         text-align: center;
-        overflow-x: scroll; /* Enables horizontal scrolling */
-    overflow-y: scroll; /* Enables vertical scrolling */
-    white-space: nowrap;
+        
     }
 
     footer {

@@ -526,62 +526,6 @@ function textCommand(message) {
             textDisplay.textContent = "Sorry, I couldn't calculate that.";  
         }  
     }
-// Getting images from the internet
-else if (message.match(/(images|pictures|wallpapers)\s+.*$/)) {
-    // Extract the keyword from the message (e.g., "car images", "bike pictures", "india wallpapers")
-    const query = message.replace(/(images|pictures|wallpapers)\s+/, '').trim(); // Remove "images", "pictures", or "wallpapers"
-    const accessKey = "vc2rrU2FW9_l5DqcN6wIEAogduPwY9x8LeEgfKIH6SI"; // Replace with your Unsplash API key
-
-    const textDisplay = document.getElementById('text-display');
-    textDisplay.innerHTML = ""; // Clear previous content
-
-    // Create a container div for grid layout
-    const gridContainer = document.createElement("div");
-    gridContainer.style = `
-        display: grid;
-        grid-template-columns: repeat(2, 1fr); /* Two images per row */
-        gap: 10px; /* Space between images */
-        justify-content: center;
-        padding: 10px;
-    `;
-
-    const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&client_id=${accessKey}&per_page=6`; // Fetch 6 images
-
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        if (data.results.length > 0) {
-          data.results.forEach(image => {
-            // Create an anchor tag to wrap the image
-            const link = document.createElement("a");
-            link.href = image.links.html; // Link to Unsplash image page
-            link.target = "_blank"; // Open in new tab
-            link.style = "text-decoration: none;";
-
-            // Create an image element
-            const imgElement = document.createElement("img");
-            imgElement.src = image.urls.small;
-            imgElement.alt = query;
-            imgElement.style = "width: 100%; max-width: 300px; border-radius: 10px; display: block;";
-
-            link.appendChild(imgElement); // Add image inside link
-
-            const imgWrapper = document.createElement("div");
-            imgWrapper.appendChild(link);
-
-            gridContainer.appendChild(imgWrapper); // Add image container inside grid
-          });
-
-          textDisplay.appendChild(gridContainer); // Add grid to display area
-        } else {
-          textDisplay.innerHTML = `<p>Sorry, I couldn't find any pictures of ${query}</p>`;
-        }
-      })
-      .catch(error => {
-        console.error("Error fetching data: ", error);
-        textDisplay.innerHTML = `<p>Sorry, there was an error fetching the images.</p>`;
-      });
-}
 
 else if (message.startsWith('images of ') || message.startsWith('pictures of ')) {
     // Extract the keyword from the message

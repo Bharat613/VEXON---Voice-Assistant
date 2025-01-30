@@ -11,7 +11,22 @@
 </head>
 
 <body>
+    
     <section class="main">
+        <!-- Hamburger Icon -->
+    <div class="hamburger-icon" id="hamburgerIcon">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <!-- Questions List -->
+    <div class="questions-container" id="questionsContainer">
+        <h4>Questions Asked:</h4>
+        <ul id="questionsList">
+            <!-- Questions will be listed here -->
+        </ul>
+    </div>
         <div class="image-container">
             <div class="image">
                 <img src="Spheres.gif" alt="image">
@@ -19,12 +34,16 @@
             <h1>V E X O N</h1>
             <p>How may i assist you?</p>
         </div>
-        <div class="input">
-            <button class="talk"><i class="fas fa-microphone-alt"></i></button>
-            <h1 class="content"> Click here to speak</h1>
-            </button>
+        <div id = "main-input">
             
+                <input type="text" placeholder="Ask anything" id = "text-input">
+          
+            <div class="input">
+                <button class="talk"><i class="fas fa-microphone-alt"></i></button>
+                <h1 class="content"> Click here to speak</h1>            
         </div>
+        </div>
+        
         <div>
             <p style="color:white;font-size: 10px;margin-top:5px;">refresh to stop</p>
         </div>
@@ -32,6 +51,31 @@
         <div id = 'text-display'>
             
         </div>
+        <button id="manual-btn">Manual</button>
+
+<div id="manual-container" class="manual hidden">
+    <h2>How to Use the Assistant</h2>
+    <p>Speak or type your question, and the assistant will respond. Below are some commands you can use:</p>
+
+    <h3>Basic Commands:</h3>
+    <ul>
+        <li><strong>"What is the capital of France?"</strong> – Gets an answer from Wikipedia.</li>
+        <li><strong>"Who is Elon Musk?"</strong> – Provides information about a person.</li>
+        <li><strong>"pictures of sunset."</strong> – Fetches images from Unsplash.</li>
+        <li><strong>"12 + 5 + 10/2?"</strong> – Solves basic math problems.</li>
+        <li><strong>"Weather in New York?"</strong> – Gets the latest weather updates.</li>
+        <li><strong>"define evaporation?"</strong> – Gets the definition of word.</li>
+        <li><strong>"Internet Speed"</strong> – Gets the Internet Speed.</li>
+        <li><strong>"if i born on  " dd - january(your month) - year"  calculate my age "</strong> – Gets the age in years.</li>
+        <li><strong>"If my weight is 30,  then what is my approxiamate height?"</strong> – Gets the height.</li>
+
+
+        
+    </ul>
+
+    <button id="close-manual">Close</button>
+</div>
+
     </section>
     <footer style="background-color: #222; color: white; text-align: center; padding: 10px; position: fixed; width: 100%; bottom: 0;">
         <p style="font-size:10px;">Developed by <strong>SHIVA</strong> | © 2025 All Rights Reserved</p>

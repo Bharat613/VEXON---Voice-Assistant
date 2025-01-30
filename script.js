@@ -137,7 +137,8 @@ document.getElementById("text-input").addEventListener("keypress", function(even
     
     if (event.key === "Enter") {  // Check if Enter key is pressed
         let inputText = this.value;  // Get input value
-        textCommand(inputText);
+        console.log(inputText);
+        textCommand(inputText.toLowerCase());
         this.value = "";  // Clear the input field
         this.placeholder = "Ask anything...";
 
@@ -207,7 +208,7 @@ function takeCommand(message) {
             speak("Sorry, I can't determine the internet speed on this device.");
         }
     }
-     
+    
     else if (message.includes('my age')) {                              // calculate age     
         console.log("Function triggered with message:", message);
     
@@ -253,7 +254,7 @@ else if (message.includes('time')) {                                            
     const time = new Date().toLocaleString(undefined, { hour: "numeric", minute: "numeric" });
     const finalText = "The current time is " + time;
     speak(finalText);
-} else if (message.includes('today date')) {                                                                        // today date
+} else if (message.includes('today date')) {                                                                        // to
     const date = new Date().toLocaleString(undefined, { month: "short", day: "numeric" });
     const finalText = "Today's date is " + date;
     speak(finalText);
@@ -303,6 +304,8 @@ else if (message.includes('what is ')) {  // Check if the message contains "what
             console.error(error);
         });
 }
+
+
  // Getting images from the internet
 else if (message.startsWith('images of ') || message.startsWith('pictures of ')) {
     // Extract the keyword from the message
@@ -425,15 +428,16 @@ else if (message.includes('weight')) {
     
    
 
-    else if (message.includes('what is') || message.includes('who is') || message.includes('what are')) {
-        window.open(`https://www.google.com/search?q=${message.replace(" ", "+")}`, "_blank");
-        const finalText = "This is what I found on the internet regarding " + message;
-        speak(finalText);
-    } else if (message.includes('wikipedia')) {
-        window.open(`https://en.wikipedia.org/wiki/${message.replace("wikipedia", "").trim()}`, "_blank");
-        const finalText = "This is what I found on Wikipedia regarding " + message;
-        speak(finalText);
-    } 
+    // else if (message.includes('what is') || message.includes('who is') || message.includes('what are')) {
+    //     window.open(`https://www.google.com/search?q=${message.replace(" ", "+")}`, "_blank");
+    //     const finalText = "This is what I found on the internet regarding " + message;
+    //     speak(finalText);
+    // }
+    // else if (message.includes('wikipedia')) {
+    //     window.open(`https://en.wikipedia.org/wiki/${message.replace("wikipedia", "").trim()}`, "_blank");
+    //     const finalText = "This is what I found on Wikipedia regarding " + message;
+    //     speak(finalText);
+    // } 
      else if (message.includes('calculator')) {
         window.open('Calculator:///');
         const finalText = "Opening Calculator";
@@ -526,6 +530,7 @@ function textCommand(message) {
             textDisplay.textContent = "Sorry, I couldn't calculate that.";  
         }  
     }
+// Getting images from the internet
 
 else if (message.startsWith('images of ') || message.startsWith('pictures of ')) {
     // Extract the keyword from the message

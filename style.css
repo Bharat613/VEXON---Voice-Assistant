@@ -361,8 +361,16 @@ ul {
         font-size : 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         display: none;
+        overflow : hidden;
     }
-    
+     ul {
+        max-height: 370px; /* Set the max-height for the ul element */
+        overflow-y: auto; /* Enable vertical scrolling */
+        padding-right: 10px; /* Optional: Adds padding to avoid overlap with scrollbar */
+        margin: 0; /* Optional: Ensures there's no extra margin */
+        list-style-type: none; /* Optional: Remove default list bullets */
+        padding-left: 0; /* Optional: Remove default left padding of the list */
+    }
     .hidden {
         display: none;
     }

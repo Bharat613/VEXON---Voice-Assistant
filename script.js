@@ -35,6 +35,7 @@ hamburgerIcon.addEventListener("click", () => {
 
 
 function speak(text) {
+    console.log(text);
     textDisplay.textContent = text;
     const text_speak = new SpeechSynthesisUtterance(text);
     const voices = window.speechSynthesis.getVoices();
@@ -111,56 +112,56 @@ window.addEventListener('load', () => {
 // ---------------------------------------------SpeechRecognition--------------------------------------------------------------//
 
 
-//  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-//  const recognition = new SpeechRecognition();
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SpeechRecognition();
 
 
-//  recognition.onresult = (event) => {
-//      btn.style.backgroundColor = "rgb(90, 155, 245)";
-//      const currentIndex = event.resultIndex;
-//      const transcript = event.results[currentIndex][0].transcript;
-//      content.textContent = transcript;
-//      takeCommand(transcript.toLowerCase());
-//  };
+  recognition.onresult = (event) => {
+      btn.style.backgroundColor = "rgb(90, 155, 245)";
+      const currentIndex = event.resultIndex;
+      const transcript = event.results[currentIndex][0].transcript;
+      content.textContent = transcript;
+      takeCommand(transcript.toLowerCase());
+  };
 //////////////////////////////
 
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
+// const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+// const recognition = new SpeechRecognition();
 
-recognition.continuous = true; // Keeps listening for commands
-recognition.interimResults = false;
-recognition.lang = "en-US";
+// recognition.continuous = true; // Keeps listening for commands
+// recognition.interimResults = false;
+// recognition.lang = "en-US";
 
-let isListen = false;
+// let isListen = false;
 
-recognition.onresult = (event) => {
-    btn.style.backgroundColor = "rgb(90, 155, 245)"; // Change button color when listening
+// recognition.onresult = (event) => {
+//     btn.style.backgroundColor = "rgb(90, 155, 245)"; // Change button color when listening
 
-    const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
-    content.textContent = transcript;
+//     const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+//     content.textContent = transcript;
 
-    if (!isListen && transcript.includes("hello")) {
-        isListen = true;
-        speak("I'm listening now.");
-    } 
-    else if (isListen) {
-        if (transcript.includes("stop listening")) {
-            isListen = false;
-            speak("Okay, I will stop listening.");
-            return; // Stops further processing
-        }
+//     if (!isListen && transcript.includes("hello")) {
+//         isListen = true;
+//         speak("I'm listening now.");
+//     } 
+//     else if (isListen) {
+//         if (transcript.includes("stop listening")) {
+//             isListen = false;
+//             speak("Okay, I will stop listening.");
+//             return; // Stops further processing
+//         }
         
-        takeCommand(transcript);
-    }
-};
+//         takeCommand(transcript);
+//     }
+// };
 
-recognition.onend = () => {
-    btn.style.backgroundColor = ""; // Reset button color
-    if (isListen) recognition.start(); // Restart only if still listening
-};
+// recognition.onend = () => {
+//     btn.style.backgroundColor = ""; // Reset button color
+//     if (isListen) recognition.start(); // Restart only if still listening
+// };
 
-// Start listening on page load
-recognition.start();
+// // Start listening on page load
+// recognition.start();
 
 
 

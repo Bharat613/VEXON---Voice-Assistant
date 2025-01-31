@@ -226,6 +226,114 @@ function takeCommand(message) {
                 textDisplay.innerHTML = `<p>Sorry, unable to access the camera.</p>`;
             });
     }
+        else if (message.includes("take me a photo") || message.includes("take a pic") || message.includes("take a selfie")) {
+        const textDisplay = document.getElementById("text-display");
+        textDisplay.innerHTML = ""; // Clear previous content
+    
+        // Create video element
+        const videoElement = document.createElement("video");
+        videoElement.autoplay = true;
+        videoElement.style = "width: 100%; max-width: 500px; border-radius: 10px; display: block;";
+    
+        // Create canvas for capturing the photo
+        const canvasElement = document.createElement("canvas");
+    
+        // Create "Take Photo" button
+        const captureButton = document.createElement("button");
+        captureButton.textContent = "📸 Take Photo";
+        captureButton.style = `
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: blue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+        `;
+    
+        // Container for styling
+        const cameraContainer = document.createElement("div");
+        cameraContainer.style = "display: flex; flex-direction: column; align-items: center;";
+        cameraContainer.appendChild(videoElement);
+        cameraContainer.appendChild(captureButton);
+        textDisplay.appendChild(cameraContainer);
+    
+        // Access the camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                videoElement.srcObject = stream;
+    
+                // Capture photo when button is clicked
+                captureButton.onclick = () => {
+                    const context = canvasElement.getContext("2d");
+                    canvasElement.width = videoElement.videoWidth;
+                    canvasElement.height = videoElement.videoHeight;
+                    context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+    
+                    // Convert canvas to image
+                    const imgElement = document.createElement("img");
+                    imgElement.src = canvasElement.toDataURL("image/png");
+                    imgElement.style = "width: 100%; max-width: 500px; border-radius: 10px; display: block;margin-bottom:40px;";
+    
+                    // Create "Save" and "Discard" buttons
+                    const buttonContainer = document.createElement("div");
+                    buttonContainer.style = "display: flex;justify-content: center; gap: 10px; margin-top: 10px;position:absolute;bottom : 2px;";
+    
+                    const saveButton = document.createElement("button");
+                    saveButton.textContent = "✅";
+                    saveButton.style = `
+                        padding: 8px 15px;
+                        background: green;
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                    `;
+    
+                    const discardButton = document.createElement("button");
+                    discardButton.textContent = "❌";
+                    discardButton.style = `
+                        padding: 8px 15px;
+                        background: #c2b5b2;
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                    `;
+    
+                    buttonContainer.appendChild(saveButton);
+                    buttonContainer.appendChild(discardButton);
+    
+                    // Stop the video stream
+                    stream.getTracks().forEach(track => track.stop());
+    
+                    // Replace video with the captured image and options
+                    textDisplay.innerHTML = ""; // Clear previous content
+                    textDisplay.appendChild(imgElement);
+                    textDisplay.appendChild(buttonContainer);
+    
+                    // Handle discard action
+                    discardButton.onclick = () => {
+                        textDisplay.innerHTML = ""; // Clear display
+                    };
+    
+                    // Handle save action
+                    saveButton.onclick = () => {
+                        const a = document.createElement("a");
+                        a.href = imgElement.src;
+                        a.download = "captured_photo.png";
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    };
+                };
+            })
+            .catch(error => {
+                console.error("Error accessing camera: ", error);
+                textDisplay.innerHTML = `<p>Sorry, unable to access the camera.</p>`;
+            });
+    }
     else if (message.includes('hey') || message.includes('hello')) {  // Wishing Vexon    1
         speak("Hello Sir, How May I Help You?");
     } 

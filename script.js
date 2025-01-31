@@ -97,8 +97,8 @@ function wishMe() {
 
 window.addEventListener('load', () => {
     window.speechSynthesis.cancel();
-    
-          speak("I am VEXON...  your assistant... ");
+    textDisplay.textContent = "I am VEXON...  your assistant... ";
+           speak("I am VEXON...  your assistant... ");
           
           
   });
@@ -111,17 +111,57 @@ window.addEventListener('load', () => {
 // ---------------------------------------------SpeechRecognition--------------------------------------------------------------//
 
 
+//  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+//  const recognition = new SpeechRecognition();
+
+
+//  recognition.onresult = (event) => {
+//      btn.style.backgroundColor = "rgb(90, 155, 245)";
+//      const currentIndex = event.resultIndex;
+//      const transcript = event.results[currentIndex][0].transcript;
+//      content.textContent = transcript;
+//      takeCommand(transcript.toLowerCase());
+//  };
+//////////////////////////////
+
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
 
+recognition.continuous = true; // Keeps listening for commands
+recognition.interimResults = false;
+recognition.lang = "en-US";
+
+let isListen = false;
 
 recognition.onresult = (event) => {
-    btn.style.backgroundColor = "rgb(90, 155, 245)";
-    const currentIndex = event.resultIndex;
-    const transcript = event.results[currentIndex][0].transcript;
+    btn.style.backgroundColor = "rgb(90, 155, 245)"; // Change button color when listening
+
+    const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
     content.textContent = transcript;
-    takeCommand(transcript.toLowerCase());
+
+    if (!isListen && transcript.includes("hello")) {
+        isListen = true;
+        speak("I'm listening now.");
+    } 
+    else if (isListen) {
+        if (transcript.includes("stop listening")) {
+            isListen = false;
+            speak("Okay, I will stop listening.");
+            return; // Stops further processing
+        }
+        
+        takeCommand(transcript);
+    }
 };
+
+recognition.onend = () => {
+    btn.style.backgroundColor = ""; // Reset button color
+    if (isListen) recognition.start(); // Restart only if still listening
+};
+
+// Start listening on page load
+recognition.start();
+
 
 
 // -----------------------------------------------------------------------------------------------------------//
@@ -226,7 +266,31 @@ function takeCommand(message) {
                 textDisplay.innerHTML = `<p>Sorry, unable to access the camera.</p>`;
             });
     }
-        else if (message.includes("take me a photo") || message.includes("take a pic") || message.includes("take a selfie")) {
+    else if (/[\d+\-*/()]+/.test(message)) {  
+        try {  
+            let expression = message
+            .replace(/times|into|x/gi, '*')  // Replace multiplication words
+            .replace(/power|to the power of|\^/gi, '**') // Replace exponentiation words
+            .replace(/square/gi, '**2'); 
+            let result = eval(expression);  
+            speak(`${result}`);  
+        } catch (error) {  
+            speak("Sorry, I couldn't calculate that.");  
+        }  
+    }
+    else if (message.includes('calculator')) {
+        window.open('https://bharat613.github.io/Digital-Calculator/');
+        const finalText = "Opening Calculator";
+        speak(finalText);
+    }
+    else if (message.startsWith("open ")) {
+        const siteName = message.replace("open ", "").trim(); // Extract website name
+        const url = `https://${siteName}.com`; // Construct the URL
+        window.open(url, "_blank");
+        speak(`Opening ${siteName}...`);
+    }
+    
+    else if (message.includes("take me a photo") || message.includes("take a pic") || message.includes("take a selfie")) {
         const textDisplay = document.getElementById("text-display");
         textDisplay.innerHTML = ""; // Clear previous content
     
@@ -262,6 +326,7 @@ function takeCommand(message) {
         // Access the camera
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(stream => {
+                NonDisplayspeak('sure boss');
                 videoElement.srcObject = stream;
     
                 // Capture photo when button is clicked
@@ -334,24 +399,38 @@ function takeCommand(message) {
                 textDisplay.innerHTML = `<p>Sorry, unable to access the camera.</p>`;
             });
     }
-    else if (message.includes('hey') || message.includes('hello')) {  // Wishing Vexon    1
-        speak("Hello Sir, How May I Help You?");
-    } 
-    
-    else if (message.includes("open google")) {                  // Opening GOOGLE      2
-        window.open("https://google.com", "_blank");
-        speak("Opening Google...");
-    } 
-    else if (message.includes("open youtube")) {                // opening YOUTUBE      3
-        window.open("https://youtube.com", "_blank");
-        speak("Opening Youtube...");
-    } 
-    else if (message.includes("open facebook")) {               // opening facebook        4
-        window.open("https://facebook.com", "_blank");
-        speak("Opening Facebook...");
+    // else if (message.includes('hey') || message.includes('hello')) {  // Wishing Vexon    1
+    //     speak("Hello Sir, How May I Help You?");
+    // } 
+    else if (message.includes('wish my friend')) {
+        // Extract the name from the message
+        const name = message.split('wish my friend ')[1].trim();
+        
+        // Check if a name was provided
+        if (name) {
+            const wishMessage = `hello  ${name}.. glad to meet you`;
+            speak(wishMessage);
+            textDisplay.textContent = wishMessage;
+        } else {
+            const errorMessage = "Please provide a name after 'wish my friend'.";
+            speak(errorMessage);
+            textDisplay.textContent = errorMessage;
+        }
     }
     
     
+    // else if (message.includes("open google")) {                  // Opening GOOGLE      2
+    //     window.open("https://google.com", "_blank");
+    //     speak("Opening Google...");
+    // } 
+    // else if (message.includes("open youtube")) {                // opening YOUTUBE      3
+    //     window.open("https://youtube.com", "_blank");
+    //     speak("Opening Youtube...");
+    // } 
+    // else if (message.includes("open facebook")) {               // opening facebook        4
+    //     window.open("https://facebook.com", "_blank");
+    //     speak("Opening Facebook...");
+    // }
     
     else if (message.includes('define')) {                      // Definition of a word     5
         const word = message.replace('define', '').trim();
@@ -390,11 +469,11 @@ function takeCommand(message) {
         }
     }
     
-    else if (message.includes('my age')) {                              // calculate age     
+    else if (message.includes('my age')) {  // calculate age
         console.log("Function triggered with message:", message);
     
-        const dobMatch = message.match(/(\d{1,2})\s*(\w+)\s*(\d{4})/); 
-        
+        const dobMatch = message.match(/(\d{1,2})\s*(\w+|\d{1,2})\s*(\d{4})/); 
+    
         if (dobMatch) {
             console.log("Date extracted:", dobMatch);
     
@@ -407,10 +486,13 @@ function takeCommand(message) {
                 july: 6, august: 7, september: 8, october: 9, november: 10, december: 11
             };
     
-            if (months[month] !== undefined) {                           
-                const dob = new Date(year, months[month], day); 
+            // Handle both word-based and numeric month inputs
+            const monthNum = months[month] !== undefined ? months[month] : parseInt(month, 10) - 1;
+    
+            if (monthNum !== undefined && monthNum >= 0 && monthNum <= 11) { 
+                const dob = new Date(year, monthNum, day);
                 const today = new Date();
-                let age = today.getFullYear() - dob.getFullYear(); 
+                let age = today.getFullYear() - dob.getFullYear();
     
                 if (today.getMonth() < dob.getMonth() || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
                     age--;
@@ -427,6 +509,7 @@ function takeCommand(message) {
             speak("I couldn't understand your date of birth.");
         }
     }
+    
   
 else if(message.includes('your name') || message.includes('what is your name')){                        // its name
     speak('My name is VEXON. I am your virtual assistant, here to help you with anything you need!');
@@ -561,18 +644,7 @@ else if (message.includes('weight')) {
     }
 
 
-    else if (/[\d+\-*/()]+/.test(message)) {  
-        try {  
-            let expression = message
-            .replace(/times|into|x/gi, '*')  // Replace multiplication words
-            .replace(/power|to the power of|\^/gi, '**') // Replace exponentiation words
-            .replace(/square/gi, '**2'); 
-            let result = eval(expression);  
-            speak(`${result}`);  
-        } catch (error) {  
-            speak("Sorry, I couldn't calculate that.");  
-        }  
-    }
+    
 
     
     else if (message.includes('weather') || message.includes('report') || message.includes('temperature') || message.includes('forecast')) {
@@ -619,11 +691,7 @@ else if (message.includes('weight')) {
     //     const finalText = "This is what I found on Wikipedia regarding " + message;
     //     speak(finalText);
     // } 
-     else if (message.includes('calculator')) {
-        window.open('Calculator:///');
-        const finalText = "Opening Calculator";
-        speak(finalText);
-    }else if(message.includes('good morning vexon') || message.includes('good afternoon vexon') || message.includes('good evening vexon') ){
+    else if(message.includes('good morning') || message.includes('good afternoon ') || message.includes('good evening') ){
         wishMe();
     } 
    else if (message.includes('thank you')) {
@@ -682,9 +750,10 @@ function textCommand(message) {
 
     addQuestionToList(message); 
 
-    if (message.includes('hey') || message.includes('hello')) {
-        textDisplay.textContent = "Hello Sir, How May I Help You?";
-    } else if (message.includes("open google")) {
+    // if (message.includes('hey') || message.includes('hello')) {
+    //     textDisplay.textContent = "Hello Sir, How May I Help You?";
+    // } else 
+    if (message.includes("open google")) {
         window.open("https://google.com", "_blank");
         textDisplay.textContent = "Opening Google...";
     } else if (message.includes("open youtube")) {
@@ -696,6 +765,13 @@ function textCommand(message) {
     } else if (message.includes('who is your boss') || message.includes('who created you') || message.includes('who developed you')) {
         textDisplay.textContent = 'SHIVA...';
     } 
+    else if (message.startsWith("open ")) {
+        const siteName = message.replace("open ", "").trim(); // Extract website name
+        const url = `https://${siteName}.com`; // Construct the URL
+        window.open(url, "_blank");
+        speak(`Opening ${siteName}...`);
+    }
+    
     else if (message.includes("take me a photo") || message.includes("take a pic") || message.includes("take a selfie")) {
         const textDisplay = document.getElementById("text-display");
         textDisplay.innerHTML = ""; // Clear previous content
@@ -1076,7 +1152,8 @@ else if (message.startsWith('images of ') || message.startsWith('pictures of '))
         textDisplay.textContent = 'Sorry Boss, I am not a Human... you may get better than me';
     } else if (message.includes('have feelings')) {
         textDisplay.textContent = 'I don\'t have feelings... but I understand your feelings';
-    } else {
+    } 
+    else {
         const query = encodeURIComponent(message);
         const apiKey = "AIzaSyBNK_5VPCGCM9xbwn-iC8hYyJGbiMAjBoY"; // Replace with your API key
         const cx = "f1a89991ee5524d36"; // Replace with your Custom Search Engine ID
@@ -1086,34 +1163,26 @@ else if (message.startsWith('images of ') || message.startsWith('pictures of '))
             .then(response => response.json())
             .then(data => {
                 if (data.items && data.items.length > 0) {
-                    let resultText = "";
+                    let resultHTML = "<div>";
                     
-    
-                    // Loop through the first 3 results
                     data.items.slice(0, 3).forEach((item, index) => {
-                        const snippet = item.snippet;  // Extract snippet (description)
-                        const title = item.title;
-                        const link = item.link;
-    
-                        // Construct the result text and speak text
-                        resultText += `${index + 1}. ${title}\nDescription: ${snippet}\nLink: ${link}\n\n`;
+                        resultHTML += `<p><strong>${index + 1}. ${item.title}</strong>: ${item.snippet} <br> 
+                                       <a href="${item.link}" target="_blank">Read more</a></p>`;
                     });
     
-                    textDisplay.textContent = resultText; // Display the results in the text display
-                     // Read out the results aloud
+                    resultHTML += "</div>";
+                    textDisplay.innerHTML = resultHTML;
                 } else {
-                    const noResultText = "Sorry, no results found.";
-                    textDisplay.textContent = noResultText;
-                    
+                    textDisplay.textContent = "Sorry, no results found.";
                 }
             })
             .catch(error => {
                 console.error("Error fetching search results:", error);
-                const errorText = "Sorry, there was an error fetching the search results.";
-                textDisplay.textContent = errorText;
-                
+                textDisplay.textContent = "Sorry, there was an error fetching the search results.";
             });
     }
+    
+        
     
     
 }

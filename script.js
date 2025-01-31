@@ -50,6 +50,22 @@ function speak(text) {
     window.speechSynthesis.speak(text_speak);
 }
 
+function NonDisplayspeak(text) {
+    
+    const text_speak = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+
+    // Choose a different voice (Example: Google UK English Male)
+    text_speak.voice = voices.find(voice => voice.name.includes('Microsoft David')) || voices[0];
+
+
+    text_speak.rate = 0.9;
+    text_speak.volume = 1;
+    text_speak.pitch = 0.7;
+
+    window.speechSynthesis.speak(text_speak);
+}
+
 
 // -----------------------------------------------------------------------------------------------------------//
 
@@ -155,8 +171,62 @@ document.getElementById("text-input").addEventListener("keypress", function(even
 
 function takeCommand(message) {
     addQuestionToList(message);  // adding questions to the history
+    if (message.includes('camera')) {
+        const textDisplay = document.getElementById('text-display');
+        textDisplay.innerHTML = ""; // Clear previous content
     
-    if (message.includes('hey') || message.includes('hello')) {  // Wishing Vexon    1
+        // Create a container div
+        const cameraContainer = document.createElement("div");
+        cameraContainer.style = "position: relative; display: inline-block;";
+    
+        // Create a video element
+        const videoElement = document.createElement("video");
+        videoElement.autoplay = true;
+        videoElement.style = "width: 100%; max-width: 500px; border-radius: 10px; display: block;";
+    
+        // Create a close button (❌)
+        const closeButton = document.createElement("button");
+        closeButton.textContent = "❌";
+        closeButton.style = `
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+        `;
+    
+        // Stop video stream and remove elements on close
+        closeButton.onclick = () => {
+            const stream = videoElement.srcObject;
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop()); // Stop the camera
+            }
+            textDisplay.innerHTML = ""; // Clear the display
+        };
+    
+        // Append elements
+        cameraContainer.appendChild(videoElement);
+        cameraContainer.appendChild(closeButton);
+        textDisplay.appendChild(cameraContainer);
+    
+        // Access the camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                NonDisplayspeak('openeing camera');
+                videoElement.srcObject = stream; // Set video stream
+            })
+            .catch(error => {
+                console.error("Error accessing camera: ", error);
+                textDisplay.innerHTML = `<p>Sorry, unable to access the camera.</p>`;
+            });
+    }
+    else if (message.includes('hey') || message.includes('hello')) {  // Wishing Vexon    1
         speak("Hello Sir, How May I Help You?");
     } 
     
@@ -172,6 +242,9 @@ function takeCommand(message) {
         window.open("https://facebook.com", "_blank");
         speak("Opening Facebook...");
     }
+    
+    
+    
     else if (message.includes('define')) {                      // Definition of a word     5
         const word = message.replace('define', '').trim();
         fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
@@ -515,6 +588,172 @@ function textCommand(message) {
     } else if (message.includes('who is your boss') || message.includes('who created you') || message.includes('who developed you')) {
         textDisplay.textContent = 'SHIVA...';
     } 
+    else if (message.includes("take me a photo") || message.includes("take a pic") || message.includes("take a selfie")) {
+        const textDisplay = document.getElementById("text-display");
+        textDisplay.innerHTML = ""; // Clear previous content
+    
+        // Create video element
+        const videoElement = document.createElement("video");
+        videoElement.autoplay = true;
+        videoElement.style = "width: 100%; max-width: 500px; border-radius: 10px; display: block;";
+    
+        // Create canvas for capturing the photo
+        const canvasElement = document.createElement("canvas");
+    
+        // Create "Take Photo" button
+        const captureButton = document.createElement("button");
+        captureButton.textContent = "📸 Take Photo";
+        captureButton.style = `
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: blue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+        `;
+    
+        // Container for styling
+        const cameraContainer = document.createElement("div");
+        cameraContainer.style = "display: flex; flex-direction: column; align-items: center;";
+        cameraContainer.appendChild(videoElement);
+        cameraContainer.appendChild(captureButton);
+        textDisplay.appendChild(cameraContainer);
+    
+        // Access the camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                videoElement.srcObject = stream;
+    
+                // Capture photo when button is clicked
+                captureButton.onclick = () => {
+                    const context = canvasElement.getContext("2d");
+                    canvasElement.width = videoElement.videoWidth;
+                    canvasElement.height = videoElement.videoHeight;
+                    context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+    
+                    // Convert canvas to image
+                    const imgElement = document.createElement("img");
+                    imgElement.src = canvasElement.toDataURL("image/png");
+                    imgElement.style = "width: 100%; max-width: 500px; border-radius: 10px; display: block;margin-bottom:40px;";
+    
+                    // Create "Save" and "Discard" buttons
+                    const buttonContainer = document.createElement("div");
+                    buttonContainer.style = "display: flex;justify-content: center; gap: 10px; margin-top: 10px;position:absolute;bottom : 2px;";
+    
+                    const saveButton = document.createElement("button");
+                    saveButton.textContent = "✅";
+                    saveButton.style = `
+                        padding: 8px 15px;
+                        background: green;
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                    `;
+    
+                    const discardButton = document.createElement("button");
+                    discardButton.textContent = "❌";
+                    discardButton.style = `
+                        padding: 8px 15px;
+                        background: #c2b5b2;
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                    `;
+    
+                    buttonContainer.appendChild(saveButton);
+                    buttonContainer.appendChild(discardButton);
+    
+                    // Stop the video stream
+                    stream.getTracks().forEach(track => track.stop());
+    
+                    // Replace video with the captured image and options
+                    textDisplay.innerHTML = ""; // Clear previous content
+                    textDisplay.appendChild(imgElement);
+                    textDisplay.appendChild(buttonContainer);
+    
+                    // Handle discard action
+                    discardButton.onclick = () => {
+                        textDisplay.innerHTML = ""; // Clear display
+                    };
+    
+                    // Handle save action
+                    saveButton.onclick = () => {
+                        const a = document.createElement("a");
+                        a.href = imgElement.src;
+                        a.download = "captured_photo.png";
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    };
+                };
+            })
+            .catch(error => {
+                console.error("Error accessing camera: ", error);
+                textDisplay.innerHTML = `<p>Sorry, unable to access the camera.</p>`;
+            });
+    }
+    
+    
+    
+    
+    else if (message.includes('camera')) {
+        const textDisplay = document.getElementById('text-display');
+        textDisplay.innerHTML = ""; // Clear previous content
+    
+        // Create a container div
+        const cameraContainer = document.createElement("div");
+        cameraContainer.style = "position: relative; display: inline-block;";
+    
+        // Create a video element
+        const videoElement = document.createElement("video");
+        videoElement.autoplay = true;
+        videoElement.style = "width: 100%; max-width: 500px; border-radius: 10px; display: block;";
+    
+        // Create a close button (❌)
+        const closeButton = document.createElement("button");
+        closeButton.textContent = "❌";
+        closeButton.style = `
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+        `;
+    
+        // Stop video stream and remove elements on close
+        closeButton.onclick = () => {
+            const stream = videoElement.srcObject;
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop()); // Stop the camera
+            }
+            textDisplay.innerHTML = ""; // Clear the display
+        };
+    
+        // Append elements
+        cameraContainer.appendChild(videoElement);
+        cameraContainer.appendChild(closeButton);
+        textDisplay.appendChild(cameraContainer);
+    
+        // Access the camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                videoElement.srcObject = stream; // Set video stream
+            })
+            .catch(error => {
+                console.error("Error accessing camera: ", error);
+                textDisplay.innerHTML = `<p>Sorry, unable to access the camera.</p>`;
+            });
+    }
     
     else if (/[\d+\-*/()]+/.test(message)) { 
         

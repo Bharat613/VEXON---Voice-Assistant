@@ -132,6 +132,7 @@
     overflow-wrap: anywhere;
     font-size : 15px;    
     margin-bottom : 100px;
+    position: relative;
 }
 
 #main-input{
@@ -327,6 +328,7 @@ ul {
           overflow-wrap: anywhere;
         font-size : 10px;    
         margin-bottom : 100px;
+        position: relative;
     }
     #text-input{
         width : 68.5vw;

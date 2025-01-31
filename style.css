@@ -61,10 +61,15 @@
 
 .main .image-container h1 {
     /* color: #00bcd4; */
-    color : rgb(98, 122, 166);
+    /* color : rgb(98, 122, 166); */
+    color : white;
     text-align: center;
     margin-bottom: 10px;
     font-size: 40px;
+    text-shadow : 0px 0px  10px blue,
+                    0px 0px  20px blue,
+                    0px 0px 40px blue,
+                    0px 0px 80px blue;
 }
 
 .main .image-container p {
@@ -126,13 +131,15 @@
     justify-content: center;     
     align-items: center;         
     text-align: justify;  
-    color : white;  
+    color : rgb(8, 8, 8);  
     padding : 10px; 
     overflow: hidden;
     overflow-wrap: anywhere;
     font-size : 15px;    
     margin-bottom : 100px;
-    position: relative;
+    position : relative;
+    background-color: #ddd;
+    font-family:monospace;
 }
 
 #main-input{
@@ -283,6 +290,8 @@ ul {
         display: flex;
         flex-direction: row;
         align-items: center;
+        overflow: hidden;
+        
     }
 
     .talk {
@@ -322,16 +331,16 @@ ul {
         justify-content: center;     
         align-items: center;         
         text-align: justify;  
-        color : white;  
+        color : rgb(8, 8, 8);   
         padding : 10px; 
           overflow: hidden;
           overflow-wrap: anywhere;
         font-size : 10px;    
         margin-bottom : 100px;
-        position: relative;
+        position : relative;
     }
     #text-input{
-        width : 68.5vw;
+        width : 69vw;
         height : 44px;
         border : none;
         padding : 5px;
@@ -342,6 +351,7 @@ ul {
 .input{
     height : 46px !important;
     border-radius : 10px !important;
+    
 }
 
     footer {
@@ -351,21 +361,22 @@ ul {
 
     .manual {
         position: fixed;
-        bottom: 10px;
+        bottom: 50px;
         left: 50%;
         transform: translateX(-50%);
-        background: white;
+        background: rgb(249, 245, 245);
         padding: 15px;
         border-radius: 10px;
         width: 80%;
         max-width: 400px;
         height : 80%;
+        overflow: hidden;
         font-size : 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         display: none;
-        overflow : hidden;
+        
     }
-     ul {
+    ul {
         max-height: 370px; /* Set the max-height for the ul element */
         overflow-y: auto; /* Enable vertical scrolling */
         padding-right: 10px; /* Optional: Adds padding to avoid overlap with scrollbar */
@@ -373,6 +384,7 @@ ul {
         list-style-type: none; /* Optional: Remove default list bullets */
         padding-left: 0; /* Optional: Remove default left padding of the list */
     }
+    
     .hidden {
         display: none;
     }
